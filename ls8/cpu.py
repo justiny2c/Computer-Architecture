@@ -36,8 +36,8 @@ class CPU:
         self.branchtable[OP1] = self.ldi
         self.branchtable[OP2] = self.print
         self.branchtable[OP3] = self.multiply
-        # self.branchtable[OP4] = self.push
-        # self.branchtable[OP5] = self.pop
+        self.branchtable[OP4] = self.push
+        self.branchtable[OP5] = self.pop
         self.branchtable[OP6] = self.hlt
         # self.branchtable[OP7] = self.call
         # self.branchtable[OP8] = self.ret
@@ -60,6 +60,18 @@ class CPU:
         operand_a = self.ram[self.pc + 1]
         operand_b = self.ram[self.pc + 2]
         self.alu("MUL", operand_a, operand_b)
+
+    def push(self):
+        reg_address = self.ram[self.pc + 1]
+        self.sp -= 1
+        value = self.reg[reg_address]
+        self.ram[self.sp] = value
+
+    def pop(self):
+        pop_value = self.ram[self.sp]
+        reg_address = self.ram[self.pc + 1]
+        self.reg[reg_address] = pop_value
+        self.sp += 1
 
     def load(self):
         """Load a program into memory."""

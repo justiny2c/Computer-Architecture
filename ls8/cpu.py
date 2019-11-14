@@ -41,7 +41,7 @@ class CPU:
         self.branchtable[OP6] = self.hlt
         self.branchtable[OP7] = self.call
         self.branchtable[OP8] = self.ret
-        # self.branchtable[OP9] = self.add
+        self.branchtable[OP9] = self.add
 
     def ldi(self):
         operand_a = self.ram[self.pc + 1]  # targeted register
@@ -88,6 +88,9 @@ class CPU:
         self.sp += 1
 
         self.pc = next_address
+
+    def add(self):
+        self.reg[self.ram[self.pc + 1]] += self.reg[self.ram[self.pc + 2]]
 
     def load(self):
         """Load a program into memory."""

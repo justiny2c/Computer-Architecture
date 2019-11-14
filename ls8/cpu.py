@@ -39,8 +39,8 @@ class CPU:
         self.branchtable[OP4] = self.push
         self.branchtable[OP5] = self.pop
         self.branchtable[OP6] = self.hlt
-        # self.branchtable[OP7] = self.call
-        # self.branchtable[OP8] = self.ret
+        self.branchtable[OP7] = self.call
+        self.branchtable[OP8] = self.ret
         # self.branchtable[OP9] = self.add
 
     def ldi(self):
@@ -72,6 +72,22 @@ class CPU:
         reg_address = self.ram[self.pc + 1]
         self.reg[reg_address] = pop_value
         self.sp += 1
+
+    def call(self):
+
+        # custom push functionality
+        next_address = self.pc + 2
+        self.sp -= 1
+        self.ram[self.sp] = next_address
+        # set pc
+        address = self.reg[self.ram[self.pc + 1]]
+        self.pc = address
+
+    def ret(self):
+        next_address = self.ram[self.sp]
+        self.sp += 1
+
+        self.pc = next_address
 
     def load(self):
         """Load a program into memory."""
